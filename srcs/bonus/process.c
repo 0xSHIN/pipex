@@ -59,7 +59,10 @@ int	open_fd(t_pipex *pipex, int i)
 	}
 	if (i == pipex->nbcmd - 1)
 	{
-		fd = open(pipex->out_file, O_WRONLY | O_CREAT | O_TRUNC, 0666);
+		if (pipex->here_doc)
+			fd = open(pipex->out_file, O_WRONLY | O_CREAT | O_APPEND, 0666);
+		else
+			fd = open(pipex->out_file, O_WRONLY | O_CREAT | O_TRUNC, 0666);
 		if (fd < 0)
 			return (close(pipex->prev), close(pipex->fd[1])
 				, perror("Error"), exit(1), fd);
